@@ -1,0 +1,216 @@
+{
+  "info": {
+    "_postman_id": "assignment-workflow-portal-2025",
+    "name": "Assignment Workflow Portal API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"userName\": \"johndoe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"yourpassword\",\n  \"role\": \"teacher\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/v1/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"yourpassword\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/v1/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "auth", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignments (Teacher)",
+      "item": [
+        {
+          "name": "Create Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{teacher_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Assignment 1\",\n  \"description\": \"Solve the problems.\",\n  \"dueDate\": \"2025-10-01T23:59:59.000Z\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/create",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "create"]
+            }
+          }
+        },
+        {
+          "name": "Update Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{teacher_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"<assignment_id>\",\n  \"title\": \"Updated Title\",\n  \"description\": \"Updated description.\",\n  \"dueDate\": \"2025-10-10T23:59:59.000Z\",\n  \"status\": \"Published\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/update",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "update"]
+            }
+          }
+        },
+        {
+          "name": "List Assignments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{teacher_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/list?status=Draft&page=1&limit=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "list"],
+              "query": [
+                { "key": "status", "value": "Draft" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "View Submissions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{teacher_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/submissions/<assignment_id>",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "submissions", "<assignment_id>"]
+            }
+          }
+        },
+        {
+          "name": "Mark Submission as Reviewed",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{teacher_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/review/<submission_id>",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "review", "<submission_id>"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignments (Student)",
+      "item": [
+        {
+          "name": "List Published Assignments",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/published?page=1&limit=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "published"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Submit Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"assignmentId\": \"<assignment_id>\",\n  \"answer\": \"My answer text.\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/submit",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "submit"]
+            }
+          }
+        },
+        {
+          "name": "View My Submission",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "url": {
+              "raw": "http://localhost:8000/v1/api/assignments/mysubmission/<assignment_id>",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8000",
+              "path": ["v1", "api", "assignments", "mysubmission", "<assignment_id>"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
